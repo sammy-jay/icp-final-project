@@ -1,7 +1,14 @@
+import { Link } from 'react-router-dom';
+
 export default function LandingPage() {
+
+  const handleClick = () => {
+    
+  }
+
   return (
     <div className="bg-gray-100">
-      <div className="mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8">
+      <div className="mx-auto max-w-6xl py-16 sm:px-6 sm:py-32 lg:px-8">
         <div className="relative isolate overflow-hidden bg-gray-200 px-6 pt-16 shadow-2xl sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
           <svg
             viewBox="0 0 1024 1024"
@@ -33,18 +40,18 @@ export default function LandingPage() {
               Malesuada adipiscing sagittis vel nulla.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-              <a
-                href="#"
+              <Link
+              to="/auth/sign-up"
                 className="rounded-md bg-slate-800 px-3.5 py-2.5 text-sm font-semibold text-gray-100 shadow-sm hover:bg-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Get started
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                to="/auth/sign-in"
                 className="text-sm font-semibold leading-6 text-slate-700"
               >
-                Learn more <span aria-hidden="true">→</span>
-              </a>
+                Continue <span aria-hidden="true">→</span>
+              </Link>
             </div>
           </div>
           <div className="relative mt-16 h-80 lg:mt-8">

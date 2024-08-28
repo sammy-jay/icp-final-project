@@ -9,6 +9,6 @@
 }
 @layer utilities {
     .sidebar-icon{
-        @apply text-slate-700 w-10 h-10 p-2 cursor-pointer hover:scale-110 transition-all duration-150;
+        @apply  w-10 h-10 p-2 cursor-pointer hover:scale-110 transition-all duration-150;
     }
 }
