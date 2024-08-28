@@ -1,29 +1,24 @@
-import { useState } from 'react';
-import { urius_icp_backend } from 'declarations/urius-icp-backend';
+import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LandingPage from './routes/LandingPage';
+import DashboardPage from './routes/dashboard/DashboardPage';
 
 function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    urius_icp_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <LandingPage />,
+    },
+    {
+      path: "/dashboard",
+      element: <DashboardPage />,
+    },
+  ]);
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
+    <main className="w-full">
+     
+      <RouterProvider router={router} />
     </main>
   );
 }
