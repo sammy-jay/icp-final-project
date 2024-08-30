@@ -6,7 +6,7 @@ import { IoMdCopy } from "react-icons/io";
 const CodePlayground = () => {
   return (
     <RoomProvider
-      id="my-room"
+      id={localStorage.getItem("projectId")}
       initialPresence={{
         cursor: null,
       }}
@@ -31,7 +31,7 @@ const CodePlayground = () => {
           </div>
           <div className="flex flex-row space-x-1 items-center">
             <p className="text-gray-400">
-            id: <span>new-room</span>
+            id: <span>{localStorage.getItem("projectId")}</span>
           </p>
           <IoMdCopy className="w-6 h-6 text-gray-400 cursor-pointer"/>
           </div>

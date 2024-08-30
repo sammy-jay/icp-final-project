@@ -93,8 +93,10 @@ export default function LiveCursors({ cursorPanel, name, color }: Props) {
               name={name}
               key={id}
               color={color}
-              x={other.cursor.x}
-              y={other.cursor.y}
+              x={100}
+              y={100}
+              // x={other?.cursor?.x}
+              // y={other?.cursor?.y}
             />
           );
         })

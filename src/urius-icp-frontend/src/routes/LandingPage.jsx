@@ -30,18 +30,29 @@ export default function LandingPage() {
             </defs>
           </svg>
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+            <div className="w-full flex flex-row justify-center lg:justify-start items-center gap-2 mb-8">
+              <img
+                alt="Urius"
+                src="assets/urius-logo.png"
+                className="h-[48px] w-[48px]"
+              />
+              <h2 className="text-2xl font-semibold font-mono tracking-wider">
+                URIUS
+              </h2>
+            </div>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Boost your productivity.
+              Revolutionize Your Workflow with
               <br />
-              Start using our app today.
+              Real-Time Collaboration.
             </h2>
             <p className="mt-6 text-lg leading-8 text-slate-700">
-              Ac euismod vel sit maecenas id pellentesque eu sed consectetur.
-              Malesuada adipiscing sagittis vel nulla.
+              Work together effortlessly with our integrated text and code
+              editor platform. Boost productivity with live collaboration and
+              seamless coding.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
               <Link
-              to="/auth/sign-up"
+                to="/auth/sign-up"
                 className="rounded-md bg-slate-800 px-3.5 py-2.5 text-sm font-semibold text-gray-100 shadow-sm hover:bg-slate-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Get started
@@ -54,13 +65,13 @@ export default function LandingPage() {
               </Link>
             </div>
           </div>
-          <div className="relative mt-16 h-80 lg:mt-8">
+          <div className="relative mt-16 h-80 lg:mt-8 w-full">
             <img
               alt="App screenshot"
-              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-              width={1824}
-              height={1080}
-              className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
+              src="assets/urius.png"
+              width={624}
+              height={564}
+              className="absolute center left-0 top-0 right-0 w-[1049px] h-[604px] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
             />
           </div>
         </div>

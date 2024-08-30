@@ -66,7 +66,7 @@ export default function CollaborativeCodeEditor() {
     <div ref={cursorPanel} className="h-full">
       <LiveCursors
         cursorPanel={cursorPanel}
-        name="Tolu"
+        name={localStorage.getItem("username") || "Anon"}
         color={["#FF0099", "#FF7A00"]}
       />
       <div
