@@ -12,6 +12,9 @@
     "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
+    "@blocknote/core": "^0.15.6",
+    "@blocknote/mantine": "^0.15.6",
+    "@blocknote/react": "^0.15.6",
     "@codemirror/lang-javascript": "^6.2.2",
     "@dfinity/agent": "^1.4.0",
     "@dfinity/auth-client": "^1.4.0",

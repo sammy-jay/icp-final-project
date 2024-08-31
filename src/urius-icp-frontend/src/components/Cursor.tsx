@@ -19,7 +19,7 @@ type BasicCursorProps = AllProps & {
 
 type NameCursorProps = AllProps & {
   variant: "name";
-  name: string;
+  name?: string;
   avatar?: never;
   size?: never;
 };

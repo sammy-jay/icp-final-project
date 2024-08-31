@@ -7,7 +7,7 @@ import { useBoundingClientRectRef } from "../utils/useBoundingClientRectRef";
 type Props = {
   // The element that's used for pointer events and scroll position
   cursorPanel: MutableRefObject<HTMLElement | null>;
-  name: string;
+  name?: string;
   color: [string, string];
 };
 
@@ -89,8 +89,7 @@ export default function LiveCursors({ cursorPanel, name, color }: Props) {
 
           return (
             <Cursor
-              variant="name"
-              name={name}
+              variant="basic"
               key={id}
               color={color}
               x={100}

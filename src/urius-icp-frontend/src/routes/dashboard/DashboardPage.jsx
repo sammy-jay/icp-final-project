@@ -15,14 +15,16 @@ import { IoMdAdd, IoMdNotifications } from "react-icons/io";
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import CodePlayground from "../projects/CodePlayground";
 import { generateRandom } from "../../utils";
+import TextPlayground from "../projects/TextPlayground";
 
 const DashboardPage = () => {
   const [section, setSection] = useState("dashboard");
+  const [projectType, setProjectType] = useState("");
 
   return (
     <main className="max-w-[1000px] lg:mx-auto bg-gray-50 mx-8">
       <nav className="flex full  mt-8 rounded-md drop-shadow-md flex-row justify-between items-center bg-gray-100 py-2 px-4">
-        <div className='flex flex-row items-center gap-2'>
+        <div className="flex flex-row items-center gap-2">
           <img
             alt="Urius"
             src="assets/urius-logo.png"
@@ -53,8 +55,9 @@ const DashboardPage = () => {
             onClick={() => setSection("projects")}
             className={`sidebar-icon text-slate-700 ${
               section == "projects" && "bg-gray-300 rounded-md"
-            } ${section == "new-code-playground" && "bg-gray-300 rounded-md"} 
-            ${section == "join-project" && "bg-gray-300 rounded-md"}`}
+            } ${section == "new-code-playground" && "bg-gray-300 rounded-md"} ${
+              section == "new-text-playground" && "bg-gray-300 rounded-md"
+            } ${section == "join-project" && "bg-gray-300 rounded-md"}`}
           />
           <BiLogoMicrosoftTeams
             onClick={() => setSection("teams")}
@@ -92,11 +95,15 @@ const DashboardPage = () => {
             <DashboardComponent setSection={setSection} />
           )}
           {section === "projects" && (
-            <ProjectComponent setSection={setSection} />
+            <ProjectComponent
+              setSection={setSection}
+              setProjectType={setProjectType}
+            />
           )}
           {section === "new-code-playground" && <CodePlayground />}
+          {section === "new-text-playground" && <TextPlayground />}
           {section === "join-project" && (
-            <JoinProject setSection={setSection} />
+            <JoinProject setSection={setSection} projectType={projectType} />
           )}
         </div>
       </section>
@@ -125,9 +132,10 @@ const DashboardComponent = ({ setSection }) => {
   );
 };
 
-const ProjectComponent = ({ setSection }) => {
+const ProjectComponent = ({ setSection, setProjectType }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const handleNewProject = () => {
+
+  const handleNewProject = (type) => {
     setIsLoading(true);
     const projectId = generateRandom(8);
     const name = generateRandom(6);
@@ -136,8 +144,13 @@ const ProjectComponent = ({ setSection }) => {
       .then((value) => {
         if (value !== "") {
           setIsLoading(false);
-          localStorage.setItem("projectId", value);
-          setSection("new-code-playground");
+          if (type == "code") {
+            localStorage.setItem("projectId", value);
+            setSection("new-code-playground");
+          } else if (type == "text") {
+            localStorage.setItem("textProjectId", value);
+            setSection("new-text-playground");
+          }
         } else {
           console.log("Something went wrong");
           setIsLoading(false);
@@ -147,8 +160,9 @@ const ProjectComponent = ({ setSection }) => {
     // call the backend and store the data
   };
 
-  const handleJoinProject = () => {
+  const handleJoinProject = (projectType) => {
     setSection("join-project");
+    setProjectType(projectType);
     // localStorage.setItem("projectId", value);
     // setSection("new-code-playground");
   };
@@ -169,11 +183,24 @@ const ProjectComponent = ({ setSection }) => {
         </div>
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <IoDocumentAttachOutline className="w-[30px] h-[30px] text-gray-400" />
-          <h2 className="text-slate-600 text-lg font-light mt-8">
-            Text Document
+          <h2 className="text-slate-600 text-lg font-light mt-4">
+            Text Editor
           </h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("text")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("textEditor")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
         </div>
-        {/* <Link to="/projects/new/code-editor">  */}
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <FaCode className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-4">
@@ -181,20 +208,19 @@ const ProjectComponent = ({ setSection }) => {
           </h2>
           <div className="flex flex-row gap-2">
             <button
-              onClick={handleNewProject}
+              onClick={() => handleNewProject("code")}
               className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
             >
               New
             </button>
             <button
-              onClick={handleJoinProject}
+              onClick={() => handleJoinProject("codeEditor")}
               className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
             >
               Join
             </button>
           </div>
         </div>
-        {/* </Link> */}
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <BiSpreadsheet className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-8">
@@ -206,13 +232,17 @@ const ProjectComponent = ({ setSection }) => {
   );
 };
 
-const JoinProject = ({ setSection }) => {
-  const [form, setForm] = useState({projectId: ""})
+const JoinProject = ({ setSection, projectType }) => {
+  const [form, setForm] = useState({ projectId: "" });
 
-  
   const handleClick = () => {
-    localStorage.setItem("projectId", form.projectId);
-    setSection("new-code-playground");
+    if (projectType == "codeEditor") {
+      localStorage.setItem("projectId", form.projectId);
+      setSection("new-code-playground");
+    } else if (projectType == "textEditor") {
+      localStorage.setItem("textProjectId", form.projectId);
+      setSection("new-text-playground");
+    }
   };
 
   const handleChange = (e) => {
@@ -247,7 +277,10 @@ const JoinProject = ({ setSection }) => {
           />
         </div>
         <div>
-          <button onClick={handleClick} className="mt-4 flex w-full justify-center rounded-md bg-slate-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600">
+          <button
+            onClick={handleClick}
+            className="mt-4 flex w-full justify-center rounded-md bg-slate-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+          >
             Join
           </button>
         </div>
