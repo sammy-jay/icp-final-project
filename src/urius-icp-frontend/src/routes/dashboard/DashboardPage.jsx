@@ -116,8 +116,45 @@ const DashboardComponent = ({ setSection }) => {
     <>
       <div className="w-full p-4 rounded-md bg-gray-100">
         <h2 className="text-slate-800 font-semibold text-2xl">Dashboard</h2>
+        <h2 className="text-gray-400 font-light text-md">
+          View all your collaborations.
+        </h2>
       </div>
-      <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
+      <div className="scrollbar w-full overflow-y-scroll h-[60vh] flex flex-wrap justify-center lg:justify-start flex-row gap-4 py-4">
+        {/* Cards */}
+
+        <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <div className="flex flex-row justify-start items-center gap-2">
+            <IoDocumentAttachOutline className="w-[28px] h-[28px] text-gray-400" />
+            <h2 className="text-slate-600 text-md font-medium">Key note speaker speech</h2>
+          </div>
+          <p className="text-gray-400">
+            id: <span>{localStorage.getItem("textProjectId")}</span>
+          </p>
+          <div className="flex flex-row gap-2 justify-end w-full">
+            <button className="py-2 px-4 text-sm text-gray-200 bg-slate-700 rounded-md">
+              Continue
+            </button>
+          </div>
+        </div>
+       
+        <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <div className="flex flex-row justify-start items-center gap-2">
+            <FaCode className="w-[28px] h-[28px] text-gray-400" />
+            <h2 className="text-slate-600 text-md font-medium">Dev bootcamp demo</h2>
+          </div>
+          <p className="text-gray-400">
+            id: <span>{localStorage.getItem("textProjectId")}</span>
+          </p>
+          <div className="flex flex-row gap-2 justify-end w-full">
+            <button className="py-2 px-4 text-sm text-gray-200 bg-slate-700 rounded-md">
+              Continue
+            </button>
+          </div>
+        </div>
+       
+      </div>
+      {/* <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
         <h2 className="text-[32px] text-slate-600 font-light">
           You have no projects yet
         </h2>
@@ -127,7 +164,7 @@ const DashboardComponent = ({ setSection }) => {
         >
           Create New Project
         </button>
-      </div>
+      </div> */}
     </>
   );
 };
@@ -175,7 +212,7 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           Create a new collaboration
         </h2>
       </div>
-      <div className="w-full overflow-y-scroll max-h-[60vh] flex flex-wrap justify-center lg:justify-start flex-row gap-4 py-4">
+      <div className="scrollbar w-full overflow-y-scroll max-h-[60vh] flex flex-wrap justify-center lg:justify-start flex-row gap-4 py-4">
         {/* Cards */}
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <FaChalkboard className="w-[30px] h-[30px] text-gray-400" />

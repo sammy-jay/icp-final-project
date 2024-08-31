@@ -2,13 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    body{
-        @apply bg-gray-50;
-    }
+@layer base {
+  body {
+    @apply bg-gray-50;
+  }
 }
 @layer utilities {
-    .sidebar-icon{
-        @apply  w-10 h-10 p-2 cursor-pointer hover:scale-110 transition-all duration-150;
-    }
+  .sidebar-icon {
+    @apply w-10 h-10 p-2 cursor-pointer hover:scale-110 transition-all duration-150;
+  }
+
+  /* Custom scrollbar styles for WebKit browsers */
+  .scrollbar::-webkit-scrollbar {
+    @apply w-[6px];
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply bg-[#f1f1f1] rounded-lg;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-[#888] rounded-lg border-[3px] border-[#f1f1f1];
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+   @apply bg-[#555];
+  }
 }
