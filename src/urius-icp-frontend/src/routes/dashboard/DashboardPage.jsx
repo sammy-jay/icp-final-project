@@ -17,12 +17,65 @@ import CodePlayground from "../projects/CodePlayground";
 import { generateRandom } from "../../utils";
 import TextPlayground from "../projects/TextPlayground";
 
+import {
+  CallingState,
+  StreamTheme,
+  CallControls,
+  SpeakerLayout,
+  useCallStateHooks,
+  ParticipantView,
+} from "@stream-io/video-react-sdk";
+import "@stream-io/video-react-sdk/dist/css/styles.css";
+export const MyParticipantList = (props) => {
+  const { participants } = props;
+  return (
+    <div style={{ display: "flex", flexDirection: "row", gap: "8px" }}>
+      {participants.map((participant) => (
+        <ParticipantView
+          participant={participant}
+          key={participant.sessionId}
+        />
+      ))}
+    </div>
+  );
+};
+
+export const MyFloatingLocalParticipant = (props) => {
+  const { participant } = props;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "15px",
+        left: "15px",
+        width: "240px",
+        height: "135px",
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 10px 3px",
+        borderRadius: "12px",
+      }}
+    >
+      <ParticipantView participant={participant} />
+    </div>
+  );
+};
+
 const DashboardPage = () => {
   const [section, setSection] = useState("dashboard");
   const [projectType, setProjectType] = useState("");
 
+  const { useCallCallingState, useLocalParticipant, useRemoteParticipants } =
+    useCallStateHooks();
+
+  const callingState = useCallCallingState();
+  const localParticipant = useLocalParticipant();
+  const remoteParticipants = useRemoteParticipants();
+
+  if (callingState !== CallingState.JOINED) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <main className="max-w-[1000px] lg:mx-auto bg-gray-50 mx-8">
+    <main className="max-w-[1300px] lg:mx-auto bg-gray-50 mx-8">
       <nav className="flex full  mt-8 rounded-md drop-shadow-md flex-row justify-between items-center bg-gray-100 py-2 px-4">
         <div className="flex flex-row items-center gap-2">
           <img
@@ -106,6 +159,23 @@ const DashboardPage = () => {
             <JoinProject setSection={setSection} projectType={projectType} />
           )}
         </div>
+
+        {section === "new-code-playground" && (
+          <div className="w-[400px]">
+            <StreamTheme>
+              <SpeakerLayout participantsBarPosition="bottom" />
+              <CallControls className="w-[250px]" />
+            </StreamTheme>
+          </div>
+        )}
+        {section === "new-text-playground" && (
+          <div className="w-[400px]">
+            <StreamTheme>
+              <SpeakerLayout participantsBarPosition="bottom" />
+              <CallControls className="w-[250px]" />
+            </StreamTheme>
+          </div>
+        )}
       </section>
     </main>
   );
@@ -126,7 +196,9 @@ const DashboardComponent = ({ setSection }) => {
         <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <div className="flex flex-row justify-start items-center gap-2">
             <IoDocumentAttachOutline className="w-[28px] h-[28px] text-gray-400" />
-            <h2 className="text-slate-600 text-md font-medium">Key note speaker speech</h2>
+            <h2 className="text-slate-600 text-md font-medium">
+              Key note speaker speech
+            </h2>
           </div>
           <p className="text-gray-400">
             id: <span>{localStorage.getItem("textProjectId")}</span>
@@ -137,11 +209,13 @@ const DashboardComponent = ({ setSection }) => {
             </button>
           </div>
         </div>
-       
+
         <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <div className="flex flex-row justify-start items-center gap-2">
             <FaCode className="w-[28px] h-[28px] text-gray-400" />
-            <h2 className="text-slate-600 text-md font-medium">Dev bootcamp demo</h2>
+            <h2 className="text-slate-600 text-md font-medium">
+              Dev bootcamp demo
+            </h2>
           </div>
           <p className="text-gray-400">
             id: <span>{localStorage.getItem("textProjectId")}</span>
@@ -152,7 +226,6 @@ const DashboardComponent = ({ setSection }) => {
             </button>
           </div>
         </div>
-       
       </div>
       {/* <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
         <h2 className="text-[32px] text-slate-600 font-light">

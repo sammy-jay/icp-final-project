@@ -14,5 +14,8 @@
   "type": "module",
   "workspaces": [
     "src/urius-icp-frontend"
-  ]
+  ],
+  "dependencies": {
+    "@stream-io/video-react-sdk": "^1.2.23"
+  }
 }
