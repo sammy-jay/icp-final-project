@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { urius_icp_backend } from "declarations/urius-icp-backend";
 import { Link } from "react-router-dom";
 import {
@@ -63,16 +63,16 @@ const DashboardPage = () => {
   const [section, setSection] = useState("dashboard");
   const [projectType, setProjectType] = useState("");
 
-  const { useCallCallingState, useLocalParticipant, useRemoteParticipants } =
-    useCallStateHooks();
+  // const { useCallCallingState, useLocalParticipant, useRemoteParticipants } =
+  //   useCallStateHooks();
 
-  const callingState = useCallCallingState();
-  const localParticipant = useLocalParticipant();
-  const remoteParticipants = useRemoteParticipants();
+  // const callingState = useCallCallingState();
+  // const localParticipant = useLocalParticipant();
+  // const remoteParticipants = useRemoteParticipants();
 
-  if (callingState !== CallingState.JOINED) {
-    return <div>Loading...</div>;
-  }
+  // if (callingState !== CallingState.JOINED) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <main className="max-w-[1300px] lg:mx-auto bg-gray-50 mx-8">
@@ -160,7 +160,7 @@ const DashboardPage = () => {
           )}
         </div>
 
-        {section === "new-code-playground" && (
+        {/* {section === "new-code-playground" && (
           <div className="w-[400px]">
             <StreamTheme>
               <SpeakerLayout participantsBarPosition="bottom" />
@@ -175,13 +175,36 @@ const DashboardPage = () => {
               <CallControls className="w-[250px]" />
             </StreamTheme>
           </div>
-        )}
+        )} */}
       </section>
     </main>
   );
 };
 
 const DashboardComponent = ({ setSection }) => {
+  const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleContinue = (projectId, projectType) => {
+    console.log(projectId, projectType);
+
+    if (projectType == "codeEditor") {
+      localStorage.setItem("projectId", projectId);
+      setSection("new-code-playground");
+    } else if (projectType == "textEditor") {
+      localStorage.setItem("textProjectId", projectId);
+      setSection("new-text-playground");
+    }
+  };
+
+  useEffect(() => {
+    urius_icp_backend
+      .getProjectByUsername(localStorage.getItem("username"))
+      .then((projects) => setProjects(projects));
+
+      setIsLoading(false);
+  }, []);
+
   return (
     <>
       <div className="w-full p-4 rounded-md bg-gray-100">
@@ -190,54 +213,61 @@ const DashboardComponent = ({ setSection }) => {
           View all your collaborations.
         </h2>
       </div>
-      <div className="scrollbar w-full overflow-y-scroll h-[60vh] flex flex-wrap justify-center lg:justify-start flex-row gap-4 py-4">
-        {/* Cards */}
-
-        <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
-          <div className="flex flex-row justify-start items-center gap-2">
-            <IoDocumentAttachOutline className="w-[28px] h-[28px] text-gray-400" />
-            <h2 className="text-slate-600 text-md font-medium">
-              Key note speaker speech
-            </h2>
-          </div>
-          <p className="text-gray-400">
-            id: <span>{localStorage.getItem("textProjectId")}</span>
-          </p>
-          <div className="flex flex-row gap-2 justify-end w-full">
-            <button className="py-2 px-4 text-sm text-gray-200 bg-slate-700 rounded-md">
-              Continue
-            </button>
-          </div>
+      {isLoading && (
+        <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
+          <h2 className="text-[32px] text-slate-600 font-light">
+            Loading...
+          </h2>
         </div>
-
-        <div className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600">
-          <div className="flex flex-row justify-start items-center gap-2">
-            <FaCode className="w-[28px] h-[28px] text-gray-400" />
-            <h2 className="text-slate-600 text-md font-medium">
-              Dev bootcamp demo
-            </h2>
-          </div>
-          <p className="text-gray-400">
-            id: <span>{localStorage.getItem("textProjectId")}</span>
-          </p>
-          <div className="flex flex-row gap-2 justify-end w-full">
-            <button className="py-2 px-4 text-sm text-gray-200 bg-slate-700 rounded-md">
-              Continue
-            </button>
-          </div>
+      )}
+      {!isLoading && projects.length > 0 ? (
+        <div className="scrollbar w-full overflow-y-scroll h-[60vh] flex flex-wrap justify-center lg:justify-start flex-row gap-4 py-4">
+          {/* Cards */}
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600"
+            >
+              <div className="flex flex-row justify-start items-center gap-2">
+                {project.projectType == "textEditor" && (
+                  <IoDocumentAttachOutline className="w-[28px] h-[28px] text-gray-400" />
+                )}
+                {project.projectType == "codeEditor" && (
+                  <FaCode className="w-[28px] h-[28px] text-gray-400" />
+                )}
+                <h2 className="text-slate-600 text-md font-medium">
+                  {project.name}
+                </h2>
+              </div>
+              <p className="text-gray-400">
+                id: <span>{project.id}</span>
+              </p>
+              <div className="flex flex-row gap-2 justify-end w-full">
+                <button
+                  onClick={() =>
+                    handleContinue(project.id, project.projectType)
+                  }
+                  className="py-2 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-      {/* <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
-        <h2 className="text-[32px] text-slate-600 font-light">
-          You have no projects yet
-        </h2>
-        <button
-          onClick={() => setSection("projects")}
-          className="bg-slate-700 text-gray-100 rounded-md py-2 px-3 cursor-pointer"
-        >
-          Create New Project
-        </button>
-      </div> */}
+      ) : (
+        <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
+          <h2 className="text-[32px] text-slate-600 font-light">
+            You have no projects yet
+          </h2>
+          <button
+            onClick={() => setSection("projects")}
+            className="bg-slate-700 text-gray-100 rounded-md py-2 px-3 cursor-pointer"
+          >
+            Create New Project
+          </button>
+        </div>
+      )}
     </>
   );
 };
@@ -250,14 +280,14 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
     const projectId = generateRandom(8);
     const name = generateRandom(6);
     urius_icp_backend
-      .createProject(projectId, name, localStorage.getItem("username"))
+      .createProject(projectId, name, localStorage.getItem("username"), type)
       .then((value) => {
         if (value !== "") {
           setIsLoading(false);
-          if (type == "code") {
+          if (type == "codeEditor") {
             localStorage.setItem("projectId", value);
             setSection("new-code-playground");
-          } else if (type == "text") {
+          } else if (type == "textEditor") {
             localStorage.setItem("textProjectId", value);
             setSection("new-text-playground");
           }
@@ -298,7 +328,7 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           </h2>
           <div className="flex flex-row gap-2">
             <button
-              onClick={() => handleNewProject("text")}
+              onClick={() => handleNewProject("textEditor")}
               className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
             >
               New
@@ -318,7 +348,7 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           </h2>
           <div className="flex flex-row gap-2">
             <button
-              onClick={() => handleNewProject("code")}
+              onClick={() => handleNewProject("codeEditor")}
               className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
             >
               New

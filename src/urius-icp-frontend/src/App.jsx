@@ -32,15 +32,15 @@ const userId = "Kyle_Katarn";
 const callId = "xOsPrZDcDS1X";
 
 
-const user = {
-  id: userId,
-  name: localStorage.getItem("username"),
-  image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
-};
+// const user = {
+//   id: userId,
+//   name: localStorage.getItem("username"),
+//   image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
+// };
 
-const client = new StreamVideoClient({ apiKey, user, token });
-const call = client.call("default", callId);
-call.join({ create: true });
+// const client = new StreamVideoClient({ apiKey, user, token });
+// const call = client.call("default", callId);
+// call.join({ create: true });
 
 function App() {
   const router = createBrowserRouter([
@@ -64,8 +64,8 @@ function App() {
 
   return (
     <main className="w-full">
-      <StreamVideo client={client}>
-        <StreamCall call={call}>
+      {/* <StreamVideo client={client}> */}
+        {/* <StreamCall call={call}> */}
           <LiveblocksProvider
             publicApiKey={
               "pk_dev_dMOdAw6fhtNCeg4PQbB64uQ0j1DdbSpJKb01Fqj7Ze42nfk-MxCfph2SknAhmGmE"
@@ -73,8 +73,8 @@ function App() {
           >
             <RouterProvider router={router} />
           </LiveblocksProvider>
-        </StreamCall>
-      </StreamVideo>
+        {/* </StreamCall> */}
+      {/* </StreamVideo> */}
     </main>
   );
 }

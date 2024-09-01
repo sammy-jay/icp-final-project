@@ -1,5 +1,6 @@
 import Buffer "mo:base/Buffer";
 import Text "mo:base/Text";
+import Array "mo:base/Array";
 
 actor {
   type User = {
@@ -25,8 +26,8 @@ actor {
     name : Text;
     creator : Text;
     lastModifier : Text;
+    projectType : Text;
   };
-  // projectType : ProjectType;
   // createdAt : Text;
   // updatedAt : Text;
 
@@ -104,12 +105,13 @@ actor {
   };
 
   // Project Functions
-  public shared func createProject(projectId: Text, name : Text, username : Text) : async Text {
+  public shared func createProject(projectId : Text, name : Text, username : Text, projectType: Text) : async Text {
     let project = {
       id = projectId;
       name = name;
       creator = username;
       lastModifier = username;
+      projectType = projectType;
     };
 
     let _ = projectsDB.add(project);
@@ -117,4 +119,18 @@ actor {
   };
 
   // public shared func joinProject(projectId: Text): async Text {};
+
+  public shared func getProjectByUsername(username : Text) : async [Project] {
+    let projectsSnapshot = Buffer.toArray(projectsDB);
+
+    var projects : [Project] = [];
+
+    for (project in projectsSnapshot.vals()) {
+      if (project.creator == username) {
+        projects := Array.append(projects, [project]);
+      };
+    };
+
+    return projects;
+  };
 };
