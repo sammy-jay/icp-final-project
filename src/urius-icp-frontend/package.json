@@ -20,6 +20,8 @@
     "@dfinity/auth-client": "^1.4.0",
     "@dfinity/candid": "^1.4.0",
     "@dfinity/principal": "^1.4.0",
+    "@excalidraw/excalidraw": "^0.17.6",
+    "@jspreadsheet/react": "^11.5.4",
     "@liveblocks/client": "^2.6.0",
     "@liveblocks/react": "^2.6.0",
     "@liveblocks/yjs": "^2.6.0",

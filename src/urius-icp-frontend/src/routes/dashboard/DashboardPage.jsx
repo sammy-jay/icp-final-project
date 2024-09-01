@@ -7,6 +7,7 @@ import {
   MdInsertComment,
   MdSettings,
   MdLogout,
+  MdOutlineViewKanban,
 } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
 import { FaCode, FaChalkboard } from "react-icons/fa";
@@ -16,6 +17,7 @@ import { IoDocumentAttachOutline } from "react-icons/io5";
 import CodePlayground from "../projects/CodePlayground";
 import { generateRandom } from "../../utils";
 import TextPlayground from "../projects/TextPlayground";
+import { Excalidraw } from "@excalidraw/excalidraw";
 
 import {
   CallingState,
@@ -26,6 +28,8 @@ import {
   ParticipantView,
 } from "@stream-io/video-react-sdk";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
+import WhiteboardPlayground from "../projects/WhiteboardPlayground";
+import SpreadsheetPlayground from "../projects/SpreadsheetPlayground";
 export const MyParticipantList = (props) => {
   const { participants } = props;
   return (
@@ -83,8 +87,8 @@ const DashboardPage = () => {
             src="assets/urius-logo.png"
             className="h-[36px] w-[36px]"
           />
-          <h2 className="text-2xl font-semibold font-mono tracking-wider">
-            URIUS
+          <h2 className="text-2xl font-semibold font-mono tracking-normal">
+            SyncSpace HQ
           </h2>
         </div>
         <div className="flex flex-row gap-0 items-center">
@@ -110,6 +114,11 @@ const DashboardPage = () => {
               section == "projects" && "bg-gray-300 rounded-md"
             } ${section == "new-code-playground" && "bg-gray-300 rounded-md"} ${
               section == "new-text-playground" && "bg-gray-300 rounded-md"
+            }  ${
+              section == "new-whiteboard-playground" && "bg-gray-300 rounded-md"
+            }  ${
+              section == "new-spreadsheet-playground" &&
+              "bg-gray-300 rounded-md"
             } ${section == "join-project" && "bg-gray-300 rounded-md"}`}
           />
           <BiLogoMicrosoftTeams
@@ -143,7 +152,11 @@ const DashboardPage = () => {
             }`}
           />
         </div>
-        <div className="px-8 pr-0  w-full h-[70vh]">
+        <div
+          className={`px-8 pr-0  w-full h-[70vh] ${
+            section === "new-whiteboard-playground" && "h-[65vh]"
+          }`}
+        >
           {section === "dashboard" && (
             <DashboardComponent setSection={setSection} />
           )}
@@ -155,6 +168,10 @@ const DashboardPage = () => {
           )}
           {section === "new-code-playground" && <CodePlayground />}
           {section === "new-text-playground" && <TextPlayground />}
+          {section === "new-whiteboard-playground" && <WhiteboardPlayground />}
+          {section === "new-spreadsheet-playground" && (
+            <SpreadsheetPlayground />
+          )}
           {section === "join-project" && (
             <JoinProject setSection={setSection} projectType={projectType} />
           )}
@@ -194,6 +211,12 @@ const DashboardComponent = ({ setSection }) => {
     } else if (projectType == "textEditor") {
       localStorage.setItem("textProjectId", projectId);
       setSection("new-text-playground");
+    } else if (projectType == "whiteboard") {
+      // localStorage.setItem("textProjectId", projectId);
+      setSection("new-whiteboard-playground");
+    } else if (projectType == "spreadsheet") {
+      // localStorage.setItem("textProjectId", projectId);
+      setSection("new-spreadsheet-playground");
     }
   };
 
@@ -202,7 +225,7 @@ const DashboardComponent = ({ setSection }) => {
       .getProjectByUsername(localStorage.getItem("username"))
       .then((projects) => setProjects(projects));
 
-      setIsLoading(false);
+    setIsLoading(false);
   }, []);
 
   return (
@@ -215,9 +238,7 @@ const DashboardComponent = ({ setSection }) => {
       </div>
       {isLoading && (
         <div className="w-full min-h-[60vh] flex flex-col justify-center items-center gap-4">
-          <h2 className="text-[32px] text-slate-600 font-light">
-            Loading...
-          </h2>
+          <h2 className="text-[32px] text-slate-600 font-light">Loading...</h2>
         </div>
       )}
       {!isLoading && projects.length > 0 ? (
@@ -229,11 +250,17 @@ const DashboardComponent = ({ setSection }) => {
               className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600"
             >
               <div className="flex flex-row justify-start items-center gap-2">
+                {project.projectType == "whiteboard" && (
+                  <FaChalkboard className="w-[28px] h-[28px] text-gray-400" />
+                )}
                 {project.projectType == "textEditor" && (
                   <IoDocumentAttachOutline className="w-[28px] h-[28px] text-gray-400" />
                 )}
                 {project.projectType == "codeEditor" && (
                   <FaCode className="w-[28px] h-[28px] text-gray-400" />
+                )}
+                {project.projectType == "spreadsheet" && (
+                  <BiSpreadsheet className="w-[28px] h-[28px] text-gray-400" />
                 )}
                 <h2 className="text-slate-600 text-md font-medium">
                   {project.name}
@@ -275,6 +302,23 @@ const DashboardComponent = ({ setSection }) => {
 const ProjectComponent = ({ setSection, setProjectType }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleNewWhiteboard = (type) => {
+    setIsLoading(true);
+    const projectId = generateRandom(8);
+    const name = generateRandom(6);
+    urius_icp_backend
+      .createProject(projectId, name, localStorage.getItem("username"), type)
+      .then((value) => {
+        if (value !== "") {
+          setIsLoading(false);
+          setSection("new-whiteboard-playground");
+        } else {
+          console.log("Something went wrong");
+          setIsLoading(false);
+        }
+      });
+  };
+
   const handleNewProject = (type) => {
     setIsLoading(true);
     const projectId = generateRandom(8);
@@ -290,6 +334,8 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           } else if (type == "textEditor") {
             localStorage.setItem("textProjectId", value);
             setSection("new-text-playground");
+          } else if (type == "spreadsheet") {
+            setSection("new-spreadsheet-playground");
           }
         } else {
           console.log("Something went wrong");
@@ -320,6 +366,20 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <FaChalkboard className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-8">Whiteboard</h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewWhiteboard("whiteboard")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("whiteboard")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
         </div>
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <IoDocumentAttachOutline className="w-[30px] h-[30px] text-gray-400" />
@@ -366,6 +426,38 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           <h2 className="text-slate-600 text-lg font-light mt-8">
             Spreadsheet
           </h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("spreadsheet")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("spreadsheet")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <MdOutlineViewKanban className="w-[30px] h-[30px] text-gray-400" />
+          <h2 className="text-slate-600 text-lg font-light mt-8">Kanban</h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("kanban")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("kanban")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
         </div>
       </div>
     </>

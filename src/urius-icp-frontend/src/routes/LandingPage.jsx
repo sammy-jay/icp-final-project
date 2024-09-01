@@ -1,10 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default function LandingPage() {
-
-  const handleClick = () => {
-    
-  }
+  const handleClick = () => {};
 
   return (
     <div className="bg-gray-100">
@@ -37,7 +34,7 @@ export default function LandingPage() {
                 className="h-[48px] w-[48px]"
               />
               <h2 className="text-2xl font-semibold font-mono tracking-wider">
-                URIUS
+                SyncSpace HQ
               </h2>
             </div>
             <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">

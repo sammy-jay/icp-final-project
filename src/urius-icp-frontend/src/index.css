@@ -1,3 +1,6 @@
+@import "jsuites/dist/jsuites.css";
+@import "jspreadsheet/dist/jspreadsheet.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,6 +10,11 @@
     @apply bg-gray-50;
   }
 }
+
+.excalidraw__canvas.static{
+    border-radius: 10px;
+}
+
 @layer utilities {
   .sidebar-icon {
     @apply w-10 h-10 p-2 cursor-pointer hover:scale-110 transition-all duration-150;
