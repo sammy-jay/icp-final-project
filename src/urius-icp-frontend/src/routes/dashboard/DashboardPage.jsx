@@ -10,10 +10,11 @@ import {
   MdOutlineViewKanban,
 } from "react-icons/md";
 import { RxAvatar } from "react-icons/rx";
-import { FaCode, FaChalkboard } from "react-icons/fa";
+import { FaCode, FaChalkboard, FaWpforms } from "react-icons/fa";
 import { BiLogoMicrosoftTeams, BiSpreadsheet } from "react-icons/bi";
 import { IoMdAdd, IoMdNotifications } from "react-icons/io";
 import { IoDocumentAttachOutline } from "react-icons/io5";
+import { RiMindMap } from "react-icons/ri";
 import CodePlayground from "../projects/CodePlayground";
 import { generateRandom } from "../../utils";
 import TextPlayground from "../projects/TextPlayground";
@@ -30,6 +31,8 @@ import {
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import WhiteboardPlayground from "../projects/WhiteboardPlayground";
 import SpreadsheetPlayground from "../projects/SpreadsheetPlayground";
+import FormBuilderPlayground from '../projects/FormBuilderPlayground';
+import MindMapPlayground from '../projects/MindMapPlayground';
 export const MyParticipantList = (props) => {
   const { participants } = props;
   return (
@@ -119,7 +122,13 @@ const DashboardPage = () => {
             }  ${
               section == "new-spreadsheet-playground" &&
               "bg-gray-300 rounded-md"
-            } ${section == "join-project" && "bg-gray-300 rounded-md"}`}
+            }   ${
+              section == "new-formBuilder-playground" &&
+              "bg-gray-300 rounded-md"
+            }
+             ${
+               section == "new-mindmap-playground" && "bg-gray-300 rounded-md"
+             } ${section == "join-project" && "bg-gray-300 rounded-md"}`}
           />
           <BiLogoMicrosoftTeams
             onClick={() => setSection("teams")}
@@ -166,11 +175,15 @@ const DashboardPage = () => {
               setProjectType={setProjectType}
             />
           )}
+          {section === "new-mindmap-playground" && <MindMapPlayground />}
           {section === "new-code-playground" && <CodePlayground />}
           {section === "new-text-playground" && <TextPlayground />}
           {section === "new-whiteboard-playground" && <WhiteboardPlayground />}
           {section === "new-spreadsheet-playground" && (
             <SpreadsheetPlayground />
+          )}
+          {section === "new-formBuilder-playground" && (
+            <FormBuilderPlayground />
           )}
           {section === "join-project" && (
             <JoinProject setSection={setSection} projectType={projectType} />
@@ -336,6 +349,10 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
             setSection("new-text-playground");
           } else if (type == "spreadsheet") {
             setSection("new-spreadsheet-playground");
+          } else if (type == "formBuilder") {
+            setSection("new-formBuilder-playground");
+          } else if (type == "mindmap") {
+            setSection("new-mindmap-playground");
           }
         } else {
           console.log("Something went wrong");
@@ -422,6 +439,24 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           </div>
         </div>
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <RiMindMap className="w-[30px] h-[30px] text-gray-400" />
+          <h2 className="text-slate-600 text-lg font-light mt-4">Mind Map</h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("mindmap")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("mindmap")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <BiSpreadsheet className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-8">
             Spreadsheet
@@ -453,6 +488,26 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
             </button>
             <button
               onClick={() => handleJoinProject("kanban")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <FaWpforms className="w-[30px] h-[30px] text-gray-400" />
+          <h2 className="text-slate-600 text-lg font-light mt-8">
+            Form Builder
+          </h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("formBuilder")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("formBuilder")}
               className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
             >
               Join

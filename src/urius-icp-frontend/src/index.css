@@ -14,6 +14,9 @@
 .excalidraw__canvas.static{
     border-radius: 10px;
 }
+.optimajet-formbuilder{
+    border-radius: 10px;
+}
 
 @layer utilities {
   .sidebar-icon {
