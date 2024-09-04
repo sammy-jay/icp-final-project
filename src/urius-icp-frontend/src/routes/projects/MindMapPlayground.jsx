@@ -33,7 +33,7 @@ const MindMapPlayground = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             <h2 className="text-slate-900 text-xl font-semibold text-md">
-              Form Builder /
+              Mind Map /
             </h2>
             <input
               className="py-0 bg-transparent rounded-md w-content"

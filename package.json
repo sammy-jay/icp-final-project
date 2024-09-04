@@ -16,6 +16,8 @@
     "src/urius-icp-frontend"
   ],
   "dependencies": {
-    "@stream-io/video-react-sdk": "^1.2.23"
+    "@stream-io/video-react-sdk": "^1.2.23",
+    "react-beautiful-dnd": "^13.1.1",
+    "uuid": "^10.0.0"
   }
 }

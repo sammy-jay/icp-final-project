@@ -33,6 +33,7 @@ import WhiteboardPlayground from "../projects/WhiteboardPlayground";
 import SpreadsheetPlayground from "../projects/SpreadsheetPlayground";
 import FormBuilderPlayground from '../projects/FormBuilderPlayground';
 import MindMapPlayground from '../projects/MindMapPlayground';
+import KanbanPlayground from '../projects/KanbanPlayground';
 export const MyParticipantList = (props) => {
   const { participants } = props;
   return (
@@ -82,7 +83,7 @@ const DashboardPage = () => {
   // }
 
   return (
-    <main className="max-w-[1300px] lg:mx-auto bg-gray-50 mx-8">
+    <main className="max-w-[1300px] lg:mx-auto bg-white mx-8">
       <nav className="flex full  mt-8 rounded-md drop-shadow-md flex-row justify-between items-center bg-gray-100 py-2 px-4">
         <div className="flex flex-row items-center gap-2">
           <img
@@ -122,6 +123,8 @@ const DashboardPage = () => {
             }  ${
               section == "new-spreadsheet-playground" &&
               "bg-gray-300 rounded-md"
+            }  ${
+              section == "new-kanban-playground" && "bg-gray-300 rounded-md"
             }   ${
               section == "new-formBuilder-playground" &&
               "bg-gray-300 rounded-md"
@@ -162,7 +165,7 @@ const DashboardPage = () => {
           />
         </div>
         <div
-          className={`px-8 pr-0  w-full h-[70vh] ${
+          className={`px-8 pr-0  w-[calc(100%-60px)] h-[70vh] ${
             section === "new-whiteboard-playground" && "h-[65vh]"
           }`}
         >
@@ -185,12 +188,13 @@ const DashboardPage = () => {
           {section === "new-formBuilder-playground" && (
             <FormBuilderPlayground />
           )}
+          {section === "new-kanban-playground" && <KanbanPlayground />}
           {section === "join-project" && (
             <JoinProject setSection={setSection} projectType={projectType} />
           )}
         </div>
 
-        {/* {section === "new-code-playground" && (
+        {section === "new-code-playground" && (
           <div className="w-[400px]">
             <StreamTheme>
               <SpeakerLayout participantsBarPosition="bottom" />
@@ -205,7 +209,7 @@ const DashboardPage = () => {
               <CallControls className="w-[250px]" />
             </StreamTheme>
           </div>
-        )} */}
+        )}
       </section>
     </main>
   );
@@ -260,7 +264,7 @@ const DashboardComponent = ({ setSection }) => {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600"
+              className="bg-white w-[250px] h-[150px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-between items-start gap-1 cursor-pointer transition-all duration-300 hover:border-slate-600"
             >
               <div className="flex flex-row justify-start items-center gap-2">
                 {project.projectType == "whiteboard" && (
@@ -349,6 +353,8 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
             setSection("new-text-playground");
           } else if (type == "spreadsheet") {
             setSection("new-spreadsheet-playground");
+          } else if (type == "kanban") {
+            setSection("new-kanban-playground");
           } else if (type == "formBuilder") {
             setSection("new-formBuilder-playground");
           } else if (type == "mindmap") {
@@ -439,6 +445,24 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
           </div>
         </div>
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
+          <MdOutlineViewKanban className="w-[30px] h-[30px] text-gray-400" />
+          <h2 className="text-slate-600 text-lg font-light mt-8">Kanban</h2>
+          <div className="flex flex-row gap-2">
+            <button
+              onClick={() => handleNewProject("kanban")}
+              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
+            >
+              New
+            </button>
+            <button
+              onClick={() => handleJoinProject("kanban")}
+              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
+            >
+              Join
+            </button>
+          </div>
+        </div>
+        <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <RiMindMap className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-4">Mind Map</h2>
           <div className="flex flex-row gap-2">
@@ -476,24 +500,7 @@ const ProjectComponent = ({ setSection, setProjectType }) => {
             </button>
           </div>
         </div>
-        <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
-          <MdOutlineViewKanban className="w-[30px] h-[30px] text-gray-400" />
-          <h2 className="text-slate-600 text-lg font-light mt-8">Kanban</h2>
-          <div className="flex flex-row gap-2">
-            <button
-              onClick={() => handleNewProject("kanban")}
-              className="py-1 px-4 text-sm text-gray-200 bg-slate-700 rounded-md"
-            >
-              New
-            </button>
-            <button
-              onClick={() => handleJoinProject("kanban")}
-              className="py-1 px-4 text-sm bg-gray-200 text-slate-700 rounded-md"
-            >
-              Join
-            </button>
-          </div>
-        </div>
+
         <div className="h-[250px] w-[250px] p-4 rounded-md border-[2px] border-gray-100 flex flex-col justify-center items-center gap-4 cursor-pointer transition-all duration-300 hover:border-slate-600">
           <FaWpforms className="w-[30px] h-[30px] text-gray-400" />
           <h2 className="text-slate-600 text-lg font-light mt-8">
